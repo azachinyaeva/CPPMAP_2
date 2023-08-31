@@ -35,10 +35,7 @@ void print(Data& d1, Data& d2)
 
 void swap_lock (Data& d1, Data& d2)
 {
-    d1.get_mutex().lock();
-    d2.get_mutex().lock();
-    std::lock_guard lock1(d1.get_mutex(), std::adopt_lock);
-    std::lock_guard lock2(d2.get_mutex(), std::adopt_lock);
+    std::lock(d1.get_mutex(), d2.get_mutex());
 
     std::cout << "Lock: \n";
     print(d1, d2);
@@ -46,6 +43,9 @@ void swap_lock (Data& d1, Data& d2)
     d1.set_data(d2.get_data());
     d2.set_data(temp);
     print(d1, d2);
+    d1.get_mutex().unlock();
+    d2.get_mutex().unlock();
+
 }
 
 void swap_scoped_lock (Data& d1, Data& d2)
